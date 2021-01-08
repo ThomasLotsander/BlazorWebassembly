@@ -6,7 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
-using BlazorWebassembly.Server.Hubs;
+using DB_Connection.Connection;
+using Microsoft.EntityFrameworkCore;
+using BlazorWebassembly.Server.Controllers.Api;
+using DB_Connection.Service;
 
 namespace BlazorWebassembly.Server
 {
@@ -26,12 +29,14 @@ namespace BlazorWebassembly.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddSignalR();
+            services.AddTransient<GameController>();
+            services.AddTransient<GameService>();
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] {"application/octet-stream"});
             });
+            services.AddDbContext<GameContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("ProdConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DB_Connection\DB_Connection.csproj" />
     <ProjectReference Include="..\Client\BlazorWebassembly.Client.csproj" />
     <ProjectReference Include="..\Shared\BlazorWebassembly.Shared.csproj" />
   </ItemGroup>

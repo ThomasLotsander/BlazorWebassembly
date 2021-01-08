@@ -12,8 +12,7 @@ namespace DB_Connection.Models.GameModels
 
         public string PlayerName { get; set; }
 
-
-
+        public string Time { get; set; }
 
     }
 }
