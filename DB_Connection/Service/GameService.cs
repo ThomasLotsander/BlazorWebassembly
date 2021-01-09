@@ -17,9 +17,41 @@ namespace DB_Connection.Service
         {
             gameContext = context;
         }
-        public void AddPlayerScore(Player player)
+        public HttpResponseMessage AddPlayerScore(Player player)
         {
-            gameContext.Players.Add(player);
+            HttpRequestMessage message = new HttpRequestMessage();
+            
+            try
+            {
+                var players = gameContext.Players.ToList();
+                var existingPlayer = players.FirstOrDefault<Player>(c => c.PlayerName == player.PlayerName);
+                if (existingPlayer != null)
+                {
+                    // Player already exists;
+                    var newTime = TimeSpan.Parse(player.Time);
+                    var oldTime = TimeSpan.Parse(existingPlayer.Time);
+                    if (newTime.Ticks < oldTime.Ticks)
+                    {
+                        existingPlayer.Time = player.Time;
+                        gameContext.SaveChanges();
+                    }
+                    return message.CreateResponse(System.Net.HttpStatusCode.Forbidden);
+
+                }
+                else
+                {
+                    gameContext.Players.Add(player);
+                    gameContext.SaveChanges();
+                    return message.CreateResponse(System.Net.HttpStatusCode.OK);
+                }
+
+            }
+            catch (Exception)
+            {
+                return message.CreateResponse(System.Net.HttpStatusCode.BadRequest);
+
+                throw;
+            }
         }
 
         public List<Player> GetHighScore()

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -34,12 +35,13 @@ namespace BlazorWebassembly.Server.Controllers.Api
             return "value";
         }
 
-        // POST api/<GameController>
+        //// POST api/<GameController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Player player)
         {
-            
-        }
+            //var player = JsonSerializer.Deserialize<Player>(/*value*/);
+            gameService.AddPlayerScore(player);
+        }        
 
         // PUT api/<GameController>/5
         [HttpPut("{id}")]
